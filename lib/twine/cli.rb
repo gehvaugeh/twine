@@ -109,6 +109,10 @@ module Twine
       validate: {
         switch: ['--[no-]validate'],
         description: 'Validate the Twine file before formatting it.'
+      },
+      groupify_keys: {
+        switch: ['--groupify'],
+        description: 'Bring in the groupnames into string keys.'
       }
     }
 

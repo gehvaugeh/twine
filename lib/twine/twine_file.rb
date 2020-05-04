@@ -67,6 +67,8 @@ module Twine
     attr_reader :definitions_by_key
     attr_reader :language_codes
 
+    attr_accessor :shall_groupify_keys?
+
     private
 
     def match_key(text)
@@ -97,6 +99,77 @@ module Twine
     def set_developer_language_code(code)
       @language_codes.delete(code)
       @language_codes.insert(0, code)
+    end
+
+    # if any node or better Hash element is itself a Hash then there are subtrees
+    def has_subtrees?(tree)
+      if tree.respond_to?("each")
+        tree.each do |key, value|
+          return true if value.class == Hash
+        end
+      end
+      return false
+    end
+
+    def create_section(node, parent_section = nil)
+      key = node[0]
+      key = parent_section&.name + "_" + key if shall_groupify_keys?
+      new_section = TwineSection.new(key)
+      return new_section
+    end
+
+    def create_definition(node, parent_section = nil)
+      key = node[0]
+      key = parent_section&.name + "_" + key if shall_groupify_keys?
+      new_definition = TwineDefinition.new(key)
+      return new_definition
+    end
+
+    # will be called with the json root node, which is a Hashmap
+    def recursive_traverse_tree(tree, parent_section = nil)
+      if tree.respond_to?("each")
+        tree.each do |node|
+          if has_subtrees?(node)
+            new_section = create_section(node, parent_section)
+            @sections << new_section
+            recursive_taverse_tree(node, new_section)
+          else
+            if not defined?(new_definition)
+              new_definition = create_definition(tree, parent_section)
+              @definitions_by_key[new_definition.key]
+              parent_section.definitions << new_definition if parent_section
+            end
+
+            case key
+            when 'comment'
+              new_definition.comment = value
+            when 'tags'
+              new_definition.tags = value.split(',')
+            when 'ref'
+              new_definition.reference_key = value if value
+            else
+              if !@language_codes.include? key
+                add_language_code(key)
+              end
+              new_definition.translations[key] = value
+            end
+          end
+        end
+      end
+    end
+
+    def resolve_references()
+
+    end
+
+    def read_json(path)
+      raise Twine::Error.new("File does not exist: #{path}") unless File.file?(path)
+
+      source_file = File.read(path)
+      source_json = JSON.parse(source_file)
+
+      recursive_traverse_tree(node)
+      resolve_references
     end
 
     def read(path)
@@ -141,10 +214,10 @@ module Twine
             if match
               key = match[1].strip
               value = match[2].strip
-              
+
               value = value[1..-2] if value[0] == '`' && value[-1] == '`'
 
-              case key
+             case key
               when 'comment'
                 current_definition.comment = value
               when 'tags'
@@ -192,7 +265,7 @@ module Twine
             if !value && !definition.reference_key
               Twine::stdout.puts "WARNING: #{definition.key} does not exist in developer language '#{dev_lang}'"
             end
-            
+
             if definition.reference_key
               f.puts "\t\tref = #{definition.reference_key}"
             end
