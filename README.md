@@ -235,6 +235,24 @@ preBuild {
 
 If there's a format Twine does not yet support and you're keen to change that, check out the [documentation](documentation/formatters.md).
 
+## Modifications in this fork
+This fork modifies twine to be able to read JSON files with twine semantics. This enables nested groups and concatenating group names into string keys.
+
+```
+For example:
+{
+	"groupname" : {
+		"keyname" : {
+			"en" :  "Some english text",
+			"de" :  "Ein bisschen englischer Text"
+		}
+	{
+}
+```
+
+Results to the following string definitions:
+groupname_keyname = "Some english text"
+
 ## Contributors
 
 Many thanks to all of the contributors to the Twine project, including:
