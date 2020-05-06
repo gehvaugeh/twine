@@ -1,0 +1,54 @@
+{
+  "dialog" : {
+    "biometrie" : {
+      "erfolgreich" : {
+        "beschreibung" : {
+          "de" : "Die bioemtrische Authentifizierung war erfolgreich",
+          "en" : "Biometric authentication successful",
+          "tags" : "android,ios"
+        },
+        "titel" : {
+          "de" : "Biometrie erfolgreich",
+          "en" : "Biometrics successful",
+          "tags" : "android,ios"
+        },
+        "button" : {
+          "bestaetigen" : {
+            "de" : "Fortfahren",
+            "en" : "Continue",
+            "tags" : "android,ios",
+            "comment" : "Dies ist die Schaltflaeche fuers fortfahren..."
+          },
+          "abbrechen" : {
+            "de" : "Abbrechen",
+            "en" : "Cancel",
+            "tags" : "android",
+            "comment" : "Durch druck auf diese Schaltflaeche wird der Vorgang abgebrochen"
+          }
+        }
+      }
+    }
+  },
+  "Fehlermeldung" : {
+    "Authentifizierung" : {
+      "ungueltige_biometrie" : {
+        "text" : {
+          "de" : "Die Biometrie ist nicht mehr gueltig...",
+          "tags" : "android",
+          "comment" : "Wenn die Biometrie veraendert wurde, wird dieser Fehler angezeigt"
+
+        },
+        "titel" : {
+          "de" : "Biometrie ungueltig",
+          "fr" : "bioémétrie invalide",
+          "tags" : "android"
+        },
+        "button" : { 
+          "fortfahren" : {
+            "ref" : "dialog_biometrie_erfolgreich_beschreibung"
+          }
+        }
+      }
+    }
+  }
+}

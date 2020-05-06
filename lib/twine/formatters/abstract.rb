@@ -41,10 +41,10 @@ module Twine
           end
         elsif @options[:consume_all]
           Twine::stdout.puts "Adding new definition '#{key}' to twine file."
-          current_section = @twine_file.sections.find { |s| s.name == 'Uncategorized' }
+          current_section = @twine_file.sections['Uncategorized']
           unless current_section
             current_section = TwineSection.new('Uncategorized')
-            @twine_file.sections.insert(0, current_section)
+            @twine_file.sections['Uncategorized'] = current_section
           end
           current_definition = TwineDefinition.new(key)
           current_section.definitions << current_definition
@@ -110,7 +110,7 @@ module Twine
       end
 
       def format_sections(twine_file, lang)
-        sections = twine_file.sections.map { |section| format_section(section, lang) }
+        sections = twine_file.sections.values.map { |section| format_section(section, lang) }
         sections.compact.join("\n")
       end
 

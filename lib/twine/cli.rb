@@ -111,7 +111,7 @@ module Twine
         description: 'Validate the Twine file before formatting it.'
       },
       groupify_keys: {
-        switch: ['--groupify'],
+        switch: ['-g --groupify'],
         description: 'Bring in the groupnames into string keys.'
       }
     }

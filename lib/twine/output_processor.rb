@@ -23,7 +23,7 @@ module Twine
         result = TwineFile.new
 
         result.language_codes.concat @twine_file.language_codes
-        @twine_file.sections.each do |section|
+        @twine_file.sections.values.each do |section|
           new_section = TwineSection.new section.name
 
           section.definitions.each do |definition|
@@ -46,9 +46,9 @@ module Twine
             result.definitions_by_key[new_definition.key] = new_definition
           end
 
-          result.sections << new_section
+          result.sections[new_section.name] = new_section
         end
-
+        puts result.definitions_by_key.length
         return result
       end
     end

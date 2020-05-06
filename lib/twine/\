@@ -81,7 +81,7 @@ module Twine
     public
 
     def initialize
-      @sections = {}
+      @sections = []
       @definitions_by_key = {}
       @language_codes = []
     end
@@ -103,56 +103,84 @@ module Twine
       @language_codes.insert(0, code)
     end
 
-    def traverse(node,level=0, path = "", parent_section = nil)
-      node.each do |subnode|
-        key, value = subnode
+    # if any node or better Hash element is itself a Hash then there are subtrees
+    def has_subtrees?(tree)
+      if tree.respond_to?("each")
+        tree.each do |key, value|
+          return true if value.class == Hash
+        end
+      end
+      return false
+    end
 
-        if (value.class == Hash)
-          @sections[path] = TwineSection.new(path) unless @sections[path] or path.empty?
-          traverse(value, level + 2,
-                   if (path.empty?) then key else path + "_" + key end,
-                   @sections[path])
-        else
-          if not @definitions_by_key[path]
-            @definitions_by_key[path] = TwineDefinition.new(path)
-            parent_section.definitions << @definitions_by_key[path] if parent_section
-          end
+    def create_section(node, parent_section = nil)
+      key = node[0]
+      key = parent_section&.name + "_" + key if shall_groupify_keys?
+      new_section = TwineSection.new(key)
+      return new_section
+    end
 
-          case key
-          when /^[a-zA-Z]{2}$/
-            @definitions_by_key[path].translations[key] = value
-          when "comment"
-            @definitions_by_key[path].comment = value
-          when "tags"
-            @definitions_by_key[path].tags = value.gsub(/\s/, "").split(",")
-          when "ref"
-            @definitions_by_key[path].reference_key = value
+    def create_definition(node, parent_section = nil)
+      key = node[0]
+      key = parent_section&.name + "_" + key if shall_groupify_keys
+      new_definition = TwineDefinition.new(key)
+      return new_definition
+    end
+
+    # will be called with the json root node, which is a Hashmap
+    def recursive_traverse_tree(tree, parent_section = nil)
+      if tree.respond_to?("each")
+        tree.each do |node|
+          puts "Starting to parse: " + node[0].to_s
+          key, value = node
+
+          if has_subtrees?(node)
+            new_section = create_section(node, parent_section)
+            @sections << new_section
+            recursive_taverse_tree(node, new_section)
+          else
+            current_definition = nil
+            if !@definitions_by_key.include? key
+              current_definition = create_definition(tree, parent_section)
+              @definitions_by_key[key] = current_definition
+              parent_section.definitions << current_definition if parent_section
+            else
+              current_definition = @definitions_by_key[key]
+            end
+
+            case key
+            when 'comment'
+              current_definition.comment = value
+            when 'tags'
+              current_definition.tags = value.split(',')
+            when 'ref'
+              current_definition.reference_key = value if value
+            else
+              if !@language_codes.include? key
+                add_language_code(key)
+              end
+              current_definition.translations[key] = value
+            end
           end
         end
       end
     end
 
     def resolve_references()
-      @definitions_by_key.each do |key, definition|
-        definition.reference = @definitions_by_key[definition.reference_key] if definition.reference_key
-      end
+
     end
 
-    def read(path)
-      if not File.file?(path)
-        raise Twine::Error.new("File does not exist: #{path}")
-      end
+    def read_json(path)
+      raise Twine::Error.new("File does not exist: #{path}") unless File.file?(path)
 
-      file_handle = File.open(path, 'r:UTF-8')
-      file_content = file_handle.read
+      source_file = File.read(path)
+      source_json = JSON.parse(source_file)
 
-      json_tree = JSON.parse(file_content)
-
-      traverse json_tree
+      recursive_traverse_tree(source_json)
       resolve_references
     end
 
-    def read_old(path)
+    def read(path)
       if !File.file?(path)
         raise Twine::Error.new("File does not exist: #{path}")
       end
@@ -197,7 +225,7 @@ module Twine
 
               value = value[1..-2] if value[0] == '`' && value[-1] == '`'
 
-              case key
+             case key
               when 'comment'
                 current_definition.comment = value
               when 'tags'
@@ -220,59 +248,63 @@ module Twine
         end
       end
 
-      definition.reference = @definitions[definition.reference_key] if definition.reference_key
+      # resolve_references
+      @definitions_by_key.each do |key, definition|
+        next unless definition.reference_key
+        definition.reference = @definitions_by_key[definition.reference_key]
+      end
     end
-  end
 
-  def write(path)
-    dev_lang = @language_codes[0]
+    def write(path)
+      dev_lang = @language_codes[0]
 
-    File.open(path, 'w:UTF-8') do |f|
-      @sections.each do |section|
-        if f.pos > 0
-          f.puts ''
-        end
-
-        f.puts "[[#{section.name}]]"
-
-        section.definitions.each do |definition|
-          f.puts "\t[#{definition.key}]"
-
-          value = write_value(definition, dev_lang, f)
-          if !value && !definition.reference_key
-            Twine::stdout.puts "WARNING: #{definition.key} does not exist in developer language '#{dev_lang}'"
+      File.open(path, 'w:UTF-8') do |f|
+        @sections.each do |section|
+          if f.pos > 0
+            f.puts ''
           end
 
-          if definition.reference_key
-            f.puts "\t\tref = #{definition.reference_key}"
-          end
-          if definition.tags && definition.tags.length > 0
-            tag_str = definition.tags.join(',')
-            f.puts "\t\ttags = #{tag_str}"
-          end
-          if definition.raw_comment and definition.raw_comment.length > 0
-            f.puts "\t\tcomment = #{definition.raw_comment}"
-          end
-          @language_codes[1..-1].each do |lang|
-            write_value(definition, lang, f)
+          f.puts "[[#{section.name}]]"
+
+          section.definitions.each do |definition|
+            f.puts "\t[#{definition.key}]"
+
+            value = write_value(definition, dev_lang, f)
+            if !value && !definition.reference_key
+              Twine::stdout.puts "WARNING: #{definition.key} does not exist in developer language '#{dev_lang}'"
+            end
+
+            if definition.reference_key
+              f.puts "\t\tref = #{definition.reference_key}"
+            end
+            if definition.tags && definition.tags.length > 0
+              tag_str = definition.tags.join(',')
+              f.puts "\t\ttags = #{tag_str}"
+            end
+            if definition.raw_comment and definition.raw_comment.length > 0
+              f.puts "\t\tcomment = #{definition.raw_comment}"
+            end
+            @language_codes[1..-1].each do |lang|
+              write_value(definition, lang, f)
+            end
           end
         end
       end
     end
-  end
 
-  private
+    private
 
-  def write_value(definition, language, file)
-    value = definition.translations[language]
-    return nil unless value
+    def write_value(definition, language, file)
+      value = definition.translations[language]
+      return nil unless value
 
-    if value[0] == ' ' || value[-1] == ' ' || (value[0] == '`' && value[-1] == '`')
-      value = '`' + value + '`'
+      if value[0] == ' ' || value[-1] == ' ' || (value[0] == '`' && value[-1] == '`')
+        value = '`' + value + '`'
+      end
+
+      file.puts "\t\t#{language} = #{value}"
+      return value
     end
 
-    file.puts "\t\t#{language} = #{value}"
-    return value
   end
-
 end
