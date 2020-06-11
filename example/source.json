@@ -1,0 +1,42 @@
+{
+    "dialog" : {
+        "button" : {
+            "confirm" : {
+                "de" : "Okay"
+            }
+        },
+        "greeting" : {
+            "title" : {
+                "de" : "Willkommen",
+                "comment" : "Dies ist ein Kommentar, dieser erscheint in der exportierten ressource Datei"
+            },
+            "content" : {
+                "de" : "Herzlich willkommen in unserer App!"
+            },
+            "button" : {
+                "confirm" : {
+                    "ref" : "dialog_button_confirm"
+                },
+                "close_app" : {
+                    "de" : "App schliessen",
+                    "tags" : "ios",
+                    "comment" : "Dieser String ist getagged, man kann ihn so z.B. nur für ios exportieren"
+                }
+            }
+        },
+        "add_pin" : {
+            "title" : {
+                "de" : "Faktor hinzufuegen"
+            },
+            "content" : {
+                "de" : "Fuegen sie einen Faktor fuer die Authorisierung hinzu"
+            },
+            "button" : {
+                "confirm" : {
+                    "ref" : "dialog_button_confirm"
+                }
+            }
+        }
+
+    }
+}

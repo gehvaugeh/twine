@@ -1,0 +1,33 @@
+{
+    "dialog" : {
+        "greeting" : {
+            "content" : {
+                "de" : "Herzlich willkomen in der geflavorten App",
+                "comment" : "Dies ist ein ueberladener String"
+            }
+        },
+        "goodbye" : {
+            "content" : {
+                "de" : "Schuess und bis bald!"
+            },
+            "button" : {
+                "confirm" : {
+                    "ref" : "dialog_button_confirm",
+                    "comment" : "Flavors koennen auch referenzen aus der Quelldatei verwenden..."
+                }
+            }
+        },
+        "face_id" : {
+            "title" : {
+                "de" : "Apple Face-ID",
+                "tags" : "ios"
+            },
+            "button" : {
+                "add" : {
+                    "de" : "hinzufuegen",
+                    "tags" : "ios"
+                }
+            }
+        }
+    }
+}
