@@ -18,7 +18,7 @@ module Twine
 
       return unless options
       
-      twine_file = TwineFile.new
+      twine_file = TwineFile.new options
       twine_file.read options[:twine_file]
       runner = new(options, twine_file)
 

@@ -68,8 +68,12 @@ module Twine
     attr_reader :sections
     attr_reader :definitions_by_key
     attr_reader :language_codes
-
+    attr_reader :options
     attr_accessor :shall_groupify_keys
+
+    def initialize(options)
+      @options = options
+    end
 
     private
 
@@ -80,10 +84,11 @@ module Twine
 
     public
 
-    def initialize
+    def initialize(options = nil)
       @sections = {}
       @definitions_by_key = {}
       @language_codes = []
+      @options = options
     end
 
     def add_language_code(code)
@@ -104,6 +109,8 @@ module Twine
     end
 
     def traverse(node,level=0, path = "", parent_section = nil)
+      #new_definition = nil
+
       node.each do |subnode|
         key, value = subnode
 
@@ -113,6 +120,7 @@ module Twine
                    if (path.empty?) then key else path + "_" + key end,
                    @sections[path])
         else
+          #new_definition = TwineDefinition.new(path) unless new_definition
           if not @definitions_by_key[path]
             @definitions_by_key[path] = TwineDefinition.new(path)
             parent_section.definitions << @definitions_by_key[path] if parent_section
@@ -120,16 +128,29 @@ module Twine
 
           case key
           when /^[a-zA-Z]{2}$/
+            #  new_definition.translations[key] = value
             @definitions_by_key[path].translations[key] = value
           when "comment"
+            #  new_definition.comment = value
             @definitions_by_key[path].comment = value
           when "tags"
+            #  new_definition.tags = value.gsub(/\s/, "").split(",")
             @definitions_by_key[path].tags = value.gsub(/\s/, "").split(",")
           when "ref"
+            #  new_definition.reference_key = value
             @definitions_by_key[path].reference_key = value
           end
         end
+
       end
+      # !! Das problem ist hashmaps innerhalb json erlauben keine duplicate
+      #if new_definition
+      #  if not @definitions_by_key[path] #or new_definition.matches_tags(@options[:force_tags],false)
+      #    @definitions_by_key[path] = new_definition
+      #    parent_section.definitions << new_definition
+      #  end
+      #end
+
     end
 
     def resolve_references()
@@ -147,8 +168,17 @@ module Twine
       file_content = file_handle.read
 
       json_tree = JSON.parse(file_content)
-
       traverse json_tree
+
+      # Check for flavors
+      if @options[:flavor]
+        file_handle = File.open(@options[:flavor], 'r:UTF-8')
+        file_content = file_handle.read
+
+        json_tree = JSON.parse(file_content)
+        traverse json_tree
+      end
+
       resolve_references
     end
 

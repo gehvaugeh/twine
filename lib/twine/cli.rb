@@ -99,6 +99,13 @@ module Twine
         DESC
         repeated: true
       },
+      flavor: {
+        switch: ['--flavor FLAVOR_FILE'],
+        description: <<-DESC
+          Flavoring brings in the possibility to customize a given Set of string with a flavor file. Strings can be overloaded when keys
+          are the same as in the source file, but also new strings can be added. This can be used in branding processes of Software Development.
+        DESC
+      },
       untagged: {
         switch: ['-u', '--[no-]untagged'],
         description: <<-DESC,
@@ -111,7 +118,7 @@ module Twine
         description: 'Validate the Twine file before formatting it.'
       },
       groupify_keys: {
-        switch: ['-g --groupify'],
+        switch: ['-g', '--[no-]groupify'],
         description: 'Bring in the groupnames into string keys.'
       }
     }
@@ -130,7 +137,9 @@ module Twine
           :quiet,
           :tags,
           :untagged,
-          :validate
+          :validate,
+          :flavor,
+          :groupify_keys
         ],
         option_validation: Proc.new { |options|
           if options[:languages] and options[:languages].length > 1
