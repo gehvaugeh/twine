@@ -48,7 +48,7 @@ module Twine
 
           result.sections[new_section.name] = new_section
         end
-        puts result.definitions_by_key.length
+        puts "Generated #{result.definitions_by_key.length} strings into #{@options[:output_path]}"
         return result
       end
     end
