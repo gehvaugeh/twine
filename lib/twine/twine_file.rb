@@ -109,8 +109,6 @@ module Twine
     end
 
     def traverse(node,level=0, path = "", parent_section = nil)
-      #new_definition = nil
-
       node.each do |subnode|
         key, value = subnode
 
@@ -128,29 +126,16 @@ module Twine
 
           case key
           when /^[a-zA-Z]{2}$/
-            #  new_definition.translations[key] = value
             @definitions_by_key[path].translations[key] = value
           when "comment"
-            #  new_definition.comment = value
             @definitions_by_key[path].comment = value
           when "tags"
-            #  new_definition.tags = value.gsub(/\s/, "").split(",")
             @definitions_by_key[path].tags = value.gsub(/\s/, "").split(",")
           when "ref"
-            #  new_definition.reference_key = value
             @definitions_by_key[path].reference_key = value
           end
         end
-
       end
-      # !! Das problem ist hashmaps innerhalb json erlauben keine duplicate
-      #if new_definition
-      #  if not @definitions_by_key[path] #or new_definition.matches_tags(@options[:force_tags],false)
-      #    @definitions_by_key[path] = new_definition
-      #    parent_section.definitions << new_definition
-      #  end
-      #end
-
     end
 
     def resolve_references()
@@ -160,9 +145,7 @@ module Twine
     end
 
     def read(path)
-      if not File.file?(path)
-        raise Twine::Error.new("File does not exist: #{path}")
-      end
+      raise Twine::Error.new("File does not exist: #{path}") unless File.file?(path)
 
       file_handle = File.open(path, 'r:UTF-8')
       file_content = file_handle.read
@@ -170,8 +153,9 @@ module Twine
       json_tree = JSON.parse(file_content)
       traverse json_tree
 
-      # Check for flavors
       if @options[:flavor]
+        raise Twine::Error.new("File does not exist: #{@options[:flavor]}") unless File.file?(@options[:flavor])
+
         file_handle = File.open(@options[:flavor], 'r:UTF-8')
         file_content = file_handle.read
 
