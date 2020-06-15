@@ -100,7 +100,7 @@ module Twine
         repeated: true
       },
       flavor: {
-        switch: ['--flavor FLAVOR_FILE'],
+        switch: ['--flavor FILE1, FILE2, FILE3', Array],
         description: <<-DESC
           Flavoring brings in the possibility to customize a given Set of string with a flavor file. Strings can be overloaded when keys
           are the same as in the source file, but also new strings can be added. This can be used in branding processes of Software Development.

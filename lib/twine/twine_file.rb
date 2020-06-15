@@ -154,16 +154,18 @@ module Twine
       traverse json_tree
 
       if @options[:flavor]
-        raise Twine::Error.new("File does not exist: #{@options[:flavor]}") unless File.file?(@options[:flavor])
+        @options[:flavor].each do |flavor_file|
 
-        file_handle = File.open(@options[:flavor], 'r:UTF-8')
-        file_content = file_handle.read
+          raise Twine::Error.new("File does not exist: #{flavor_file}") unless File.file?(flavor_file)
+          file_handle = File.open(flavor_file, 'r:UTF-8')
+          file_content = file_handle.read
 
-        json_tree = JSON.parse(file_content)
-        traverse json_tree
+          json_tree = JSON.parse(file_content)
+          traverse json_tree
+        end
+
+        resolve_references
       end
-
-      resolve_references
     end
 
     def read_old(path)
