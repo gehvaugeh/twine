@@ -1,0 +1,16 @@
+{
+    "general" : {
+        "yes" : {
+            "de" : "Ja",
+            "en" : "yes"
+        }
+    },
+    "dialog" : {
+        "greeting" : {
+            "content" : {
+                "de" : "Herzlich willkomen in der doppelt geflavorten App",
+                "comment" : "Dies ist ein zweifach ueberladener String"
+            }
+        }
+    }
+}
