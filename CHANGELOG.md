@@ -1,6 +1,13 @@
 # Unreleased
 - Feature: Add --escape-all-tags option to force escaping of Android styling tags (#281)
 
+# 1.0.7 (2020-06-30) WIP
+- Feature: Source files now are in JSON Format
+  - Validation and Import must be altered in future releases to accomodate for
+    this
+- Feature: Multiple Flavor files may be loaded on top of the source file for
+  special string overloading and adding extra strings
+
 # 1.0.6 (2019-05-28)
 
 - Improvement: Support more Android styling tags (#278)
