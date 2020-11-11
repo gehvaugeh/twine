@@ -1,7 +1,13 @@
 # Unreleased
 - Feature: Add --escape-all-tags option to force escaping of Android styling tags (#281)
 
-# 1.0.7 (2020-06-30) WIP
+# 1.0.8 (2020-11-11)
+- Added --kill-all-tags option, to remove all tags beforce exporting to
+  ressource files
+- Android and Apple now handle "\n" diffrent, android creates a <br> tag, Apple
+  escapes the newline resulting in "\n"
+
+# 1.0.7 (2020-06-30)
 - Feature: Source files now are in JSON Format
   - Validation and Import must be altered in future releases to accomodate for
     this
