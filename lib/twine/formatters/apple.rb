@@ -92,7 +92,7 @@ module Twine
         end
 
         # Replace newline Chars
-        value.gsub("\\n", "\\\\n")
+        value.gsub("\n", "\\n")
 
 
       end
