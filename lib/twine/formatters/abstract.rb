@@ -165,6 +165,11 @@ module Twine
       def escape_quotes(text)
         text.gsub('"', '\\\\"')
       end
+
+      def kill_all_tags(value)
+        value.gsub(/<[^>]*>/, "")
+      end
+
     end
   end
 end

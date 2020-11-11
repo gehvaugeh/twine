@@ -53,6 +53,13 @@ module Twine
           placeholders.
         DESC
       },
+      kill_all_tags: {
+        switch: ['--kill-all-tags'],
+        description: <<-DESC,
+          Simply removes all tags from source before export. Newline Characters will still be converted to <br>
+          for android ressource files.
+        DESC
+      },
       file_name: {
         switch: ['-n', '--file-name FILE_NAME'],
         description: 'This flag may be used to overwrite the default file name of the format.'

@@ -5,6 +5,12 @@
                 "de" : "Okay"
             }
         },
+        "text_with_new_line" : {
+            "de" : "Hallo,\\nwie gehts dir?"
+        },
+        "text_with_tags" : {
+            "de" : "Hallo <b>fett</b> wie <br/>gehts dir?"
+        },
         "greeting" : {
             "title" : {
                 "de" : "Willkommen",
@@ -38,5 +44,21 @@
             }
         }
 
+    },
+    "ios" : {
+        "button" : {
+            "apple" : {
+                "de" : "Apfel, lecker!",
+                "tags" : "ios"
+            }
+        }
+    },
+    "android" : {
+        "button" : {
+            "robot" : {
+                "de" : "Robotsoup!",
+                "tags" : "android"
+            }
+        }
     }
 }

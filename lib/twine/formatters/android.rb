@@ -168,6 +168,13 @@ module Twine
         
         # replace beginning and end spaces with \u0020. Otherwise Android strips them.
         value.gsub(/\A *| *\z/) { |spaces| '\u0020' * spaces.length }
+
+        # Kill all tags if needed
+        kill_all_tags(value) if @options[:kill_all_tags]
+
+        # replace newLine sequences with <br\>
+        value.gsub("\\n", "<br/>")
+
       end
 
     end
