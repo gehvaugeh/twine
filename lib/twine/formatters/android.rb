@@ -76,7 +76,7 @@ module Twine
             set_comment_for_key(key, comment) if comment
 
             comment = nil
-          end 
+          end
         end
       end
 
@@ -86,7 +86,7 @@ module Twine
 
       def format_sections(twine_file, lang)
         result = '<resources>'
-        
+
         result += super + "\n"
 
         result += "</resources>\n"
@@ -165,12 +165,14 @@ module Twine
           xliff_tag.gsub! /(<xliff:g.*?>)(.*)(<\/xliff:g>)/ do "#{$1}#{escape_value($2)}#{$3}" end
           value.sub! 'TWINE_XLIFF_TAG_PLACEHOLDER', xliff_tag
         end
-        
+
         # replace beginning and end spaces with \u0020. Otherwise Android strips them.
-        value.gsub(/\A *| *\z/) { |spaces| '\u0020' * spaces.length }
+        value = value.gsub(/\A *| *\z/) { |spaces| '\u0020' * spaces.length }
 
         # Kill all tags if needed
-        kill_all_tags(value) if @options[:kill_all_tags]
+        if @options[:kill_all_tags]
+          value = value.gsub(/<[^>]*>/, "")
+        end
 
         # replace newLine sequences with <br\>
         value.gsub("\\n", "<br/>")

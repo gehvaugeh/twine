@@ -54,7 +54,7 @@ module Twine
         DESC
       },
       kill_all_tags: {
-        switch: ['--kill-all-tags'],
+        switch: ['-k', '--kill-all-tags'],
         description: <<-DESC,
           Simply removes all tags from source before export. Newline Characters will still be converted to <br>
           for android ressource files.
@@ -146,7 +146,8 @@ module Twine
           :untagged,
           :validate,
           :flavor,
-          :groupify_keys
+          :groupify_keys,
+          :kill_all_tags
         ],
         option_validation: Proc.new { |options|
           if options[:languages] and options[:languages].length > 1

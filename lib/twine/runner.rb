@@ -66,6 +66,9 @@ module Twine
 
       raise Twine::Error.new "Nothing to generate! The resulting file would not contain any translations." unless output
 
+      # TODO: pls implement directory check and error handling
+      # raise Twine::Error.new "Cant find output path, pls recheck output path." unless (@options[:output_path] and File.directory?(@options[:output_path]))
+     
       IO.write(@options[:output_path], output, encoding: output_encoding)
     end
 
