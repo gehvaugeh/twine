@@ -1,7 +1,10 @@
 # Unreleased
 - Feature: Add --escape-all-tags option to force escaping of Android styling tags (#281)
 
-3 1.0.9 (2020-11-16)
+# 1.0.10 (2020-11-16)
+- Android quotes no more are escaped
+
+# 1.0.9 (2020-11-16)
 - Fix for some error with returns and assignments...
 
 # 1.0.8 (2020-11-11)

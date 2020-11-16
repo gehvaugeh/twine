@@ -177,6 +177,9 @@ module Twine
         # replace newLine sequences with <br\>
         value = value.gsub("\n", "<br/>")
 
+        # no escaped quotes in android
+        value = value.gsub("\\\"","\"")
+        
         # i prefer return statements, in case somebody is wondering :-D
         return value
 
