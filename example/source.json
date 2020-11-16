@@ -11,6 +11,9 @@
         "text_with_tags" : {
             "de" : "Hallo <b>fett</b> wie <br/>gehts dir?"
         },
+        "text_with_quotes" : {
+            "de" : "Hello this is a \"quoted\" text"
+        },
         "greeting" : {
             "title" : {
                 "de" : "Willkommen",

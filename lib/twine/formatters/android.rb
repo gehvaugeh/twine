@@ -175,7 +175,10 @@ module Twine
         end
 
         # replace newLine sequences with <br\>
-        value.gsub("\n", "<br/>")
+        value = value.gsub("\n", "<br/>")
+
+        # i prefer return statements, in case somebody is wondering :-D
+        return value
 
       end
 

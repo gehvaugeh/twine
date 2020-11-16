@@ -48,11 +48,11 @@ module Twine
           end
           current_definition = TwineDefinition.new(key)
           current_section.definitions << current_definition
-          
+
           if @options[:tags] && @options[:tags].length > 0
-            current_definition.tags = @options[:tags]            
+            current_definition.tags = @options[:tags]
           end
-          
+
           @twine_file.definitions_by_key[key] = current_definition
           @twine_file.definitions_by_key[key].translations[lang] = value
         else
@@ -65,10 +65,10 @@ module Twine
 
       def set_comment_for_key(key, comment)
         return unless @options[:consume_comments]
-        
+
         if @twine_file.definitions_by_key.include?(key)
           definition = @twine_file.definitions_by_key[key]
-          
+
           reference = @twine_file.definitions_by_key[definition.reference_key] if definition.reference_key
 
           if !reference or comment != reference.raw_comment
@@ -82,7 +82,7 @@ module Twine
         basename = File.basename(path, File.extname(path))
         return basename if basename =~ only_language_and_region
         return basename if @twine_file.language_codes.include? basename
-        
+
         path.split(File::SEPARATOR).reverse.find { |segment| segment =~ only_language_and_region }
       end
 
@@ -163,11 +163,11 @@ module Twine
       end
 
       def escape_quotes(text)
-        text.gsub('"', '\\\\"')
+        return text.gsub('"', '\\"')
       end
 
       def kill_all_tags(value)
-        value.gsub(/<[^>]*>/, "")
+        return value.gsub(/<[^>]*>/, "")
       end
 
     end

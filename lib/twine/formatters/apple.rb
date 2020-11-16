@@ -84,7 +84,7 @@ module Twine
       end
 
       def format_value(value)
-        escape_quotes(value)
+        value = escape_quotes(value)
 
         # Kill all tags if needed
         if @options[:kill_all_tags]
@@ -92,10 +92,11 @@ module Twine
         end
 
         # Replace newline Chars
-        value.gsub("\n", "\\n")
+        value = value.gsub("\n", "\\n")
 
-
+        return value
       end
+
     end
   end
 end
