@@ -1,8 +1,15 @@
 {
-    "bla" : {
-      "de": "Some String",
-      "bla": {
-        "de": "Some other String"
-      }
+    "group_a": {
+        "bla": {
+            "de": "This is not a top level string",
+            "bla": {
+                "de": "This is a nested String"
+            }
+        }
+        "comment": "This works, as long as we dont have top level strings!"
+    },
+    "bla": {
+        "de": "This String is a top level one",
+        "comment": "By twine 1.0.10 this is not possible, this string will not be written to ressource file"
     }
-  }
+}
