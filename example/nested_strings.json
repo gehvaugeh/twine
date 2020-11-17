@@ -1,0 +1,8 @@
+{
+    "bla" : {
+      "de": "Some String",
+      "bla": {
+        "de": "Some other String"
+      }
+    }
+  }
