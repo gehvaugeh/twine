@@ -1,6 +1,9 @@
 # Unreleased
 - Feature: Add --escape-all-tags option to force escaping of Android styling tags (#281)
 
+# 1.0.11 (2020-11-25)
+- Added kill-all-tags option to generate-all-localization-files
+
 # 1.0.10 (2020-11-16)
 - Android quotes no more are escaped
 

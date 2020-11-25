@@ -6,21 +6,26 @@
             }
         },
         "text_with_new_line" : {
-            "de" : "Hallo,\nwie gehts dir?"
+            "de" : "Hallo,\nwie gehts dir?",
+            "en" : "Hello,\nhow are u?"
         },
         "text_with_tags" : {
-            "de" : "Hallo <b>fett</b> wie <br/>gehts dir?"
+            "de" : "Hallo <b>fett</b> wie <br/>gehts dir?",
+            "en" : "Hello <b>fat</b> how <br/>are you?"
         },
         "text_with_quotes" : {
-            "de" : "Hello this is a \"quoted\" text"
+            "de" : "Hello this is a \"quoted\" text",
+            "en" : "Hello this is a \"quoted\" text"
         },
         "greeting" : {
             "title" : {
                 "de" : "Willkommen",
+                "en" : "Welcome",
                 "comment" : "Dies ist ein Kommentar, dieser erscheint in der exportierten ressource Datei"
             },
             "content" : {
-                "de" : "Herzlich willkommen in unserer App!"
+                "de" : "Herzlich willkommen in unserer App!",
+                "en" : "Greatly welcome to our app!"
             },
             "button" : {
                 "confirm" : {

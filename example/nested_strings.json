@@ -5,7 +5,7 @@
             "bla": {
                 "de": "This is a nested String"
             }
-        }
+        },
         "comment": "This works, as long as we dont have top level strings!"
     },
     "bla": {

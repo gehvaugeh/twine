@@ -170,7 +170,8 @@ module Twine
           :quiet,
           :tags,
           :untagged,
-          :validate
+          :validate,
+          :kill_all_tags
         ],
         example: 'twine generate-all-localization-files twine.txt Resources/Locales/ --tags FT,FB'
       },
